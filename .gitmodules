@@ -1,0 +1,3 @@
+[submodule "sya_mini_printer_files"]
+	path = sya_mini_printer_files
+	url = https://github.com/sn-printer-files/sya_mini_printer_files
