@@ -1,0 +1,8 @@
+[package]
+name = "sya_sys"
+authors = [ "Samuel Nösslböck <samuel.noesslboeck@gmail.com>" ]
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+syact = "0.12.0"

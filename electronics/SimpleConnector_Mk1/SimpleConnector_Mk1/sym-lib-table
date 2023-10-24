@@ -1,3 +1,0 @@
-(sym_lib_table
-  (lib (name SimpleConnector_Mk1-rescue)(type Legacy)(uri ${KIPRJMOD}/SimpleConnector_Mk1-rescue.lib)(options "")(descr ""))
-)

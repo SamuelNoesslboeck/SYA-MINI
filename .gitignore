@@ -1,0 +1,7 @@
+# GCODE
+*.gcode
+!*.meta.gcode
+
+# CODE
+code/target
+code/Cargo.lock
