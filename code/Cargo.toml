@@ -5,4 +5,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-syact = "0.12.0"
+syact = { path = "../../../libs/syact" }
+sybot = { path = "../../../libs/sybot" }
