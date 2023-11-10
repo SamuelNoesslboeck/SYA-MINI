@@ -9,13 +9,13 @@ pub struct SyaMiniComps {
     pub arm3 : Gear<Stepper>
 }
 
-    pub type SyaMiniRobot = StepperRobot<SyaMiniComps, 4>;
+    pub type SyaMiniRobot = StepperRobot<SyaMiniComps, Gear<Stepper>, 4>;
 // 
 
 // Descriptor
     pub struct SyaMiniDesc { }
 
-    impl Descriptor<SyaMiniComps, 4> for SyaMiniDesc {
+    impl Descriptor<SyaMiniComps, Gear<Stepper>, 4> for SyaMiniDesc {
         
     }
 // 
