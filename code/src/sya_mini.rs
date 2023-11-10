@@ -9,4 +9,19 @@ pub struct SyaMiniComps {
     pub arm3 : Gear<Stepper>
 }
 
-// pub type SYA_MINI = StepperRobot<
+    pub type SyaMiniRobot = StepperRobot<SyaMiniComps, 4>;
+// 
+
+// Descriptor
+    pub struct SyaMiniDesc { }
+
+    impl Descriptor<SyaMiniComps, 4> for SyaMiniDesc {
+        
+    }
+// 
+
+// System
+    pub struct SyaMiniSystem {
+
+    }
+// 
