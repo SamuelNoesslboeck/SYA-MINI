@@ -51,11 +51,17 @@ fn main() -> Result<(), sybot::Error> {
         },
         [
             vec![
-                
+                EndSwitch::new(false, None, UniPin::new(0)?.into_input())
             ],
-            vec![],
-            vec![],
-            vec![]
+            vec![
+
+            ],
+            vec![
+
+            ],
+            vec![
+
+            ]
         ],
         vec![]
     );
