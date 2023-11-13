@@ -1,4 +1,4 @@
-use syact::prelude::*;
+use syact::{prelude::*, tool::Tongs};
 use sybot::prelude::*;
 
 mod sya_mini;
@@ -49,16 +49,18 @@ fn main() -> Result<(), sybot::Error> {
                 1.0 / 9.0
             )
         },
-        [
-            vec![
-                
-            ],
-            vec![],
-            vec![],
-            vec![]
-        ],
-        vec![]
+        vec![
+            Box::new(Tongs::new(
+                Servo::new(ServoConst::MG996R, 0),
+                0.4, 
+                0.8,
+                0.0,
+                Inertia(0.1)
+            ))
+        ]
     );
+
+    
 
     Ok(())
 }
