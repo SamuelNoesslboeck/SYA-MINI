@@ -11,7 +11,7 @@ use syact::tool::Tongs;
     const DIR_PINS : [u8; 4] = [ 24, 25, 8, 7 ];
     const MEAS_PINS : [u8; 4] = [ 4, 17, 27, 22 ];
 
-    const BASE_FORCES : [Force; 4] = [ Force(0.0), Force(0.3), Force(0.2), Force(0.1) ];
+    const BASE_FORCES : [Force; 4] = [ Force(0.0), Force(3.0), Force(2.0), Force(1.0) ];
     const BASE_INERTIAS : [Inertia; 4] = [ Inertia(0.5), Inertia(0.25), Inertia(0.1), Inertia(0.1) ];
 
     pub const MEAS_DATA : [SimpleMeasData; 4] = [
@@ -73,7 +73,7 @@ use syact::tool::Tongs;
                         )?,
                         StepperConst::MOT_17HE15_1504S
                     ),
-                    1.0 / 9.0
+                    9.0
                 ),
                 arm1: Gear::new(
                     Stepper::new(
@@ -83,7 +83,7 @@ use syact::tool::Tongs;
                         )?,
                         StepperConst::MOT_17HE15_1504S
                     ),
-                    1.0 / 9.0
+                    9.0
                 ),
                 arm2: Gear::new(
                     Stepper::new(
@@ -93,7 +93,7 @@ use syact::tool::Tongs;
                         )?,
                         StepperConst::MOT_17HE15_1504S
                     ),
-                    1.0 / 9.0
+                    9.0
                 ),
                 arm3: Gear::new(
                     Stepper::new(
@@ -103,7 +103,7 @@ use syact::tool::Tongs;
                         )?,
                         StepperConst::MOT_17HE15_1504S
                     ),
-                    1.0 / 9.0
+                    9.0
                 )
             },
             vec![
@@ -140,6 +140,7 @@ use syact::tool::Tongs;
 // 
 
 // System
+    #[derive(Debug)]
     pub struct SyaMiniStation {
         meas_res : [SimpleMeasResult; 4]
     }

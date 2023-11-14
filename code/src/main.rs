@@ -9,5 +9,7 @@ fn main() -> Result<(), sybot::Error> {
 
     stat.home(&mut rob)?;
 
+    dbg!(stat);
+
     Ok(())
 }
