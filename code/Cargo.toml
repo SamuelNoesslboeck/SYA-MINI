@@ -5,5 +5,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-syact = { path = "../../../libs/syact", features = [ "rasp" ] }
-sybot = { path = "../../../libs/sybot", features = [ "rasp" ] }
+syact = { path = "../../../libs/syact" }
+sybot = { path = "../../../libs/sybot" }
+
+[features]
+rasp = [ "syact/rasp", "sybot/rasp" ]
