@@ -73,7 +73,7 @@ use syact::tool::Tongs;
                         )?,
                         StepperConst::MOT_17HE15_1504S
                     ),
-                    9.0
+                    1.0 / 9.0
                 ),
                 arm1: Gear::new(
                     Stepper::new(
@@ -83,7 +83,7 @@ use syact::tool::Tongs;
                         )?,
                         StepperConst::MOT_17HE15_1504S
                     ),
-                    9.0
+                    1.0 / 9.0
                 ),
                 arm2: Gear::new(
                     Stepper::new(
@@ -93,7 +93,7 @@ use syact::tool::Tongs;
                         )?,
                         StepperConst::MOT_17HE15_1504S
                     ),
-                    9.0
+                    1.0 / 9.0
                 ),
                 arm3: Gear::new(
                     Stepper::new(
@@ -103,7 +103,7 @@ use syact::tool::Tongs;
                         )?,
                         StepperConst::MOT_17HE15_1504S
                     ),
-                    9.0
+                    1.0 / 9.0
                 )
             },
             vec![
