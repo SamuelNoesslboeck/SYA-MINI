@@ -4,6 +4,8 @@ use sybot::prelude::*;
 mod sya_mini;
 
 fn main() -> Result<(), sybot::Error> {
+    std::env::set_var("RUST_BACKTRACE", "1");
+    
     let mut rob= sya_mini::sya_mini_rob()?;
     let mut stat = sya_mini::SyaMiniStation::new();
 
