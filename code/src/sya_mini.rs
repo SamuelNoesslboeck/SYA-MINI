@@ -170,6 +170,10 @@ use syact::tool::Tongs;
             log::trace!("Starting measurement ... ");
 
             self.meas_res = rob.comps_mut().try_for_each_mut(|c, i| -> Result<SimpleMeasResult, syact::Error> { 
+                if i == 0 {
+                    return Ok(SimpleMeasResult::default());
+                }
+            
                 let res = syact::meas::take_simple_meas(c, &MEAS_DATA[i], 1.0);
                 log::trace!("- Measurement for component {} done!", i);
                 res
