@@ -1,6 +1,7 @@
 use core::f32::consts::PI;
 
 use syact::prelude::*;
+use sybot::conf::AxisConf;
 use sybot::prelude::*;
 
 use syact::meas::SimpleMeasResult;
@@ -143,11 +144,51 @@ use syact::tool::Tongs;
 // 
 
 // Descriptor
-    // pub struct SyaMiniDesc { }
+    pub struct SyaAxisConf {
+        pub final_angle : Phi
+    }
 
-    // impl Descriptor<SyaMiniComps, Gear<Stepper>, 4> for SyaMiniDesc {
-        
-    // }
+    impl AxisConf for SyaAxisConf {
+        fn configure(&mut self, phis : Vec<Phi>) -> Result<(), sybot::Error> {
+            self.final_angle = *phis.first().ok_or("Not enough phis given for the AxisConf!".into())?;
+            Ok(())
+        }
+    }
+
+    pub struct SyaMiniDesc {
+        _aconf : SyaAxisConf
+    }
+
+    impl Descriptor<SyaMiniComps, dyn StepperComp, 4> for SyaMiniDesc {
+        // Axis conf
+            fn aconf(&self) -> &dyn AxisConf {
+                &self._aconf
+            }
+
+            fn aconf_mut(&mut self) -> &mut dyn AxisConf {
+                &mut self._aconf
+            }
+        //
+    
+        // Events
+            fn update(&mut self, rob : &mut dyn Robot<G, T, C>, phis : &[Phi; C]) -> Result<(), crate::Error>;
+        // 
+    
+        // Calculation
+            fn convert_pos(&self, rob : &dyn Robot<G, T, C>, pos : Position) -> Result<[Phi; C], crate::Error>;
+        //
+    
+        // World object
+            fn wobj<'a>(&'a self) -> &'a WorldObj;
+    
+            fn wobj_mut<'a>(&'a mut self) -> &'a mut WorldObj;
+    
+            fn current_tcp(&self) -> &PointRef;
+    
+            /// Create a Vec3 from optional coordinates 
+            fn cache_tcp(&self, x_opt : Option<f32>, y_opt : Option<f32>, z_opt : Option<f32>) -> Vec3;
+        // 
+    }
 // 
 
 // System
