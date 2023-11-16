@@ -1,5 +1,3 @@
-use log::info;
-
 use syact::prelude::*;
 use sybot::prelude::*;
 
@@ -11,7 +9,7 @@ fn main() -> Result<(), sybot::Error> {
         std::env::set_var("RUST_BACKTRACE", "1");
     // 
 
-    info!("Logging enabled!");
+    log::info!("Logging enabled!");
 
     let mut rob= sya_mini::sya_mini_rob()?;
     let mut stat = sya_mini::SyaMiniStation::new();
@@ -20,6 +18,6 @@ fn main() -> Result<(), sybot::Error> {
     stat.home(&mut rob)?;
 
     dbg!(stat);
-
+    
     Ok(())
 }

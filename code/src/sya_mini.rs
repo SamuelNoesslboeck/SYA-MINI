@@ -123,6 +123,10 @@ use syact::tool::Tongs;
         );
 
         rob.comps_mut().try_for_each_mut(|c, i| -> Result<(), syact::Error> {
+            if i == 0 {
+                return Ok(())
+            }
+
             let mut meas = EndSwitch::new(false, None, UniInPin::new(MEAS_PINS[i]));
             meas.setup()?;
             c.add_interruptor(Box::new(meas));
