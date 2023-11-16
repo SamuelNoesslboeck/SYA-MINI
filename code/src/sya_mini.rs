@@ -14,38 +14,43 @@ use syact::tool::Tongs;
     const BASE_FORCES : [Force; 4] = [ Force(0.0), Force(3.0), Force(2.0), Force(1.0) ];
     const BASE_INERTIAS : [Inertia; 4] = [ Inertia(0.5), Inertia(0.25), Inertia(0.1), Inertia(0.1) ];
 
+    const COMP_DATA : CompData = CompData {
+        u: 24.0,
+        s_f: 1.5
+    };
+
     pub const MEAS_DATA : [SimpleMeasData; 4] = [
         SimpleMeasData {
             set_gamma: Gamma::ZERO,
-            max_dist: Delta(9.0 * 2.0 * PI),
-            meas_speed_f: 0.2,
+            max_dist: Delta(2.0 * PI),
+            meas_speed_f: 0.75,
             add_samples: 0,
 
-            sample_dist: Some(Delta(1.5 * PI))
+            sample_dist: Some(Delta(0.25 * PI))
         },
         SimpleMeasData {
             set_gamma: Gamma::ZERO,
-            max_dist: Delta(9.0 * 2.0 * PI),
-            meas_speed_f: 0.2,
+            max_dist: Delta(2.0 * PI),
+            meas_speed_f: 0.75,
             add_samples: 0,
 
-            sample_dist: Some(Delta(1.5 * PI))
+            sample_dist: Some(Delta(0.25 * PI))
         },
         SimpleMeasData {
             set_gamma: Gamma::ZERO,
-            max_dist: Delta(9.0 * 2.0 * PI),
-            meas_speed_f: 0.2,
+            max_dist: Delta(2.0 * PI),
+            meas_speed_f: 0.75,
             add_samples: 0,
 
-            sample_dist: Some(Delta(1.5 * PI))
+            sample_dist: Some(Delta(0.25 * PI))
         },
         SimpleMeasData {
             set_gamma: Gamma::ZERO,
-            max_dist: Delta(9.0 * 2.0 * PI),
-            meas_speed_f: 0.2,
+            max_dist: Delta(2.0 * PI),
+            meas_speed_f: 0.75,
             add_samples: 0,
 
-            sample_dist: Some(Delta(1.5 * PI))
+            sample_dist: Some(Delta(0.25 * PI))
         }
     ];
 // 
@@ -118,11 +123,13 @@ use syact::tool::Tongs;
         );
 
         rob.comps_mut().try_for_each_mut(|c, i| -> Result<(), syact::Error> {
-            let mut meas = EndSwitch::new(true, None, UniInPin::new(MEAS_PINS[i]));
+            let mut meas = EndSwitch::new(false, None, UniInPin::new(MEAS_PINS[i]));
             meas.setup()?;
             c.add_interruptor(Box::new(meas));
             Ok(())
         })?;
+
+        rob.comps_mut().write_data(COMP_DATA);
 
         rob.apply_forces(&BASE_FORCES)?;
         rob.apply_inertias(&BASE_INERTIAS);
@@ -132,7 +139,7 @@ use syact::tool::Tongs;
 // 
 
 // Descriptor
-    pub struct SyaMiniDesc { }
+    // pub struct SyaMiniDesc { }
 
     // impl Descriptor<SyaMiniComps, Gear<Stepper>, 4> for SyaMiniDesc {
         
@@ -156,9 +163,15 @@ use syact::tool::Tongs;
 
     impl Station<SyaMiniComps, dyn StepperComp, 4> for SyaMiniStation {
         fn home(&mut self, rob : &mut impl Robot<SyaMiniComps, dyn StepperComp, 4>) -> Result<(), sybot::Error> {
+            log::trace!("Starting measurement ... ");
+
             self.meas_res = rob.comps_mut().try_for_each_mut(|c, i| -> Result<SimpleMeasResult, syact::Error> { 
-                syact::meas::take_simple_meas(c, &MEAS_DATA[i], 1.0)
+                let res = syact::meas::take_simple_meas(c, &MEAS_DATA[i], 1.0);
+                log::trace!("- Measurement for component {} done!", i);
+                res
             })?; 
+
+            log::trace!("Measurement done!");
 
             Ok(())
         }
