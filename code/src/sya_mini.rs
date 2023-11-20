@@ -1,11 +1,12 @@
 use core::f32::consts::PI;
 
+use glam::Vec3;
 use syact::prelude::*;
-use sybot::conf::AxisConf;
 use sybot::prelude::*;
 
 use syact::meas::SimpleMeasResult;
 use syact::tool::Tongs;
+use sybot::conf::AxisConf;
 
 // Constants
     const STEP_PINS : [u8; 4] = [ 14, 15, 18, 23 ];
@@ -144,19 +145,68 @@ use syact::tool::Tongs;
 // 
 
 // Descriptor
+    #[derive(Debug, Default)]
     pub struct SyaAxisConf {
-        pub final_angle : Phi
+        pub _phis : [Phi; 1]
     }
 
     impl AxisConf for SyaAxisConf {
-        fn configure(&mut self, phis : Vec<Phi>) -> Result<(), sybot::Error> {
-            self.final_angle = *phis.first().ok_or("Not enough phis given for the AxisConf!".into())?;
+        fn configure(&mut self, phis : Vec<Phi>) -> Result<(), syact::Error> {
+            self._phis[0] = *phis.first().ok_or("Not enough phis given for the AxisConf!")?;
             Ok(())
+        }
+
+        fn phis<'a>(&'a self) -> &'a [Phi] {
+            &self._phis
         }
     }
 
     pub struct SyaMiniDesc {
-        _aconf : SyaAxisConf
+        _aconf : SyaAxisConf,
+        _kin : SerialKinematic<4>,
+        _wobj : WorldObj,
+
+        tcp: PointRef
+    }
+
+    impl SyaMiniDesc {
+        pub fn new() -> Self {
+            let wobj = WorldObj::new(0.0, 0.0, 0.0)
+                .add_point_inline("base", PointRef::new(WorldObj::new(0.0, 0.0, 100.0)
+                    .add_point_inline("arm1", PointRef::new(WorldObj::new(180.0, 0.0, 0.0)
+                        .add_point_inline("arm2", PointRef::new(WorldObj::new(180.0, 0.0, 0.0)
+                            .add_point_inline("arm3", PointRef::new(WorldObj::new(120.0, 0.0, 0.0)
+                                .add_point_inline("tcp", PointRef::new(WorldObj::new(0.0, 0.0, 0.0)
+                            ))
+                        ))
+                    ))
+                ))
+            ));
+
+            Self {
+                _aconf: SyaAxisConf::default(),
+                _kin: SerialKinematic::new([
+                    KinElement::new(
+                        Movement::Rotation(Rot::Z),
+                        wobj.point("base").unwrap()
+                    ),
+                    KinElement::new(
+                        Movement::Rotation(Rot::X),
+                        wobj.point("base/arm1").unwrap()
+                    ),
+                    KinElement::new(
+                        Movement::Rotation(Rot::X),
+                        wobj.point("base/arm1/arm2").unwrap()
+                    ),
+                    KinElement::new(
+                        Movement::Rotation(Rot::X),
+                        wobj.point("base/arm1/arm2/arm3").unwrap()
+                    )
+                ]),
+                tcp: wobj.point("base/arm1/arm2/arm3/tcp").unwrap(),
+                _wobj: wobj
+            }
+        }
     }
 
     impl Descriptor<SyaMiniComps, dyn StepperComp, 4> for SyaMiniDesc {
@@ -171,22 +221,45 @@ use syact::tool::Tongs;
         //
     
         // Events
-            fn update(&mut self, rob : &mut dyn Robot<G, T, C>, phis : &[Phi; C]) -> Result<(), crate::Error>;
+            fn update(&mut self, _rob : &mut dyn Robot<SyaMiniComps, dyn StepperComp, 4>, phis : &[Phi; 4]) -> Result<(), syact::Error> {
+                self._kin.update(phis)?;
+                Ok(())
+            }
         // 
     
         // Calculation
-            fn convert_pos(&self, rob : &dyn Robot<G, T, C>, pos : Position) -> Result<[Phi; C], crate::Error>;
+            fn convert_pos(&self, rob : &dyn Robot<SyaMiniComps, dyn StepperComp, 4>, pos : Position) -> Result<[Phi; 4], syact::Error> {
+                Ok([Phi::ZERO; 4])
+            }
         //
-    
+            
+        // Kinematic
+            fn kin(&self) -> &dyn Kinematic<4> {
+                &self._kin
+            }
+
+            fn kin_mut(&mut self) -> &mut dyn Kinematic<4> {
+                &mut self._kin
+            }
+        // 
+
         // World object
-            fn wobj<'a>(&'a self) -> &'a WorldObj;
-    
-            fn wobj_mut<'a>(&'a mut self) -> &'a mut WorldObj;
-    
-            fn current_tcp(&self) -> &PointRef;
-    
+            fn wobj(&self) -> &WorldObj {
+                &self._wobj
+            }
+
+            fn wobj_mut(&mut self) -> &mut WorldObj {
+                &mut self._wobj
+            }
+
+            fn current_tcp(&self) -> &PointRef {
+                &self.tcp
+            }
+
             /// Create a Vec3 from optional coordinates 
-            fn cache_tcp(&self, x_opt : Option<f32>, y_opt : Option<f32>, z_opt : Option<f32>) -> Vec3;
+            fn cache_tcp(&self, x_opt : Option<f32>, y_opt : Option<f32>, z_opt : Option<f32>) -> Vec3 {
+                Vec3::ZERO
+            }
         // 
     }
 // 
