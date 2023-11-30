@@ -1,3 +1,5 @@
+use core::f32::consts::PI;
+
 use syact::prelude::*;
 use sybot::prelude::*;
 
@@ -19,8 +21,10 @@ fn main() -> Result<(), sybot::Error> {
     stat.home(&mut rob)?;
 
     dbg!(desc.wobj());
-    desc.update(&mut rob, &[ Phi(1.0), Phi::ZERO, Phi::ZERO, Phi::ZERO ])?;
+    dbg!(desc.kin().calculate_end());
+    desc.update(&mut rob, &[ Phi(PI / 2.0), Phi(PI / 2.0), Phi::ZERO, Phi::ZERO ])?;
     dbg!(desc.wobj());
+    dbg!(desc.kin().calculate_end());
     
     Ok(())
 }

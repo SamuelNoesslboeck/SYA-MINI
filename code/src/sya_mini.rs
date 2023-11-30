@@ -164,9 +164,7 @@ use sybot::conf::AxisConf;
     pub struct SyaMiniDesc {
         _aconf : SyaAxisConf,
         _kin : SerialKinematic<4>,
-        _wobj : WorldObj,
-
-        tcp: PointRef
+        _wobj : WorldObj
     }
 
     impl SyaMiniDesc {
@@ -187,23 +185,22 @@ use sybot::conf::AxisConf;
                 _aconf: SyaAxisConf::default(),
                 _kin: SerialKinematic::new([
                     KinElement::new(
-                        Movement::Rotation(Rot::Z),
+                        Movement::Rotation(Rot::Y),
                         wobj.point("base").unwrap()
                     ),
                     KinElement::new(
-                        Movement::Rotation(Rot::X),
+                        Movement::Rotation(Rot::Z),
                         wobj.point("base/arm1").unwrap()
                     ),
                     KinElement::new(
-                        Movement::Rotation(Rot::X),
+                        Movement::Rotation(Rot::Y),
                         wobj.point("base/arm1/arm2").unwrap()
                     ),
                     KinElement::new(
-                        Movement::Rotation(Rot::X),
+                        Movement::Rotation(Rot::Y),
                         wobj.point("base/arm1/arm2/arm3").unwrap()
                     )
                 ]),
-                tcp: wobj.point("base/arm1/arm2/arm3/tcp").unwrap(),
                 _wobj: wobj
             }
         }
@@ -253,7 +250,7 @@ use sybot::conf::AxisConf;
             }
 
             fn current_tcp(&self) -> &PointRef {
-                &self.tcp
+                self.kin().tcp()
             }
 
             /// Create a Vec3 from optional coordinates 
