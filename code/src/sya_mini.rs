@@ -14,10 +14,10 @@ use sybot::conf::AxisConf;
     const MEAS_PINS : [u8; 4] = [ 4, 17, 27, 22 ];
 
     const BASE_FORCES : [Force; 4] = [ Force(0.0), Force(3.0), Force(2.0), Force(1.0) ];
-    const BASE_INERTIAS : [Inertia; 4] = [ Inertia(8.0), Inertia(5.0), Inertia(3.0), Inertia(2.5) ];
+    const BASE_INERTIAS : [Inertia; 4] = [ Inertia(12.0), Inertia(8.0), Inertia(5.0), Inertia(2.5) ];
 
     const COMP_DATA : CompData = CompData {
-        u: 24.0,
+        u: 12.0,
         s_f: 1.5
     };
 
@@ -141,6 +141,13 @@ use sybot::conf::AxisConf;
         rob.apply_inertias(&BASE_INERTIAS);
 
         Ok(rob)
+    }
+
+    pub fn debug_robot(rob : &SyaMiniRobot) {
+        rob.comps().base.ctrl.debug_data();
+        rob.comps().arm1.ctrl.debug_data();
+        rob.comps().arm2.ctrl.debug_data();
+        rob.comps().arm3.ctrl.debug_data();
     }
 // 
 

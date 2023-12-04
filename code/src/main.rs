@@ -3,6 +3,8 @@ use core::f32::consts::PI;
 use syact::prelude::*;
 use sybot::prelude::*;
 
+use crate::sya_mini::debug_robot;
+
 mod sya_mini;
 
 fn main() -> Result<(), sybot::Error> {
@@ -18,13 +20,17 @@ fn main() -> Result<(), sybot::Error> {
     let mut stat = sya_mini::SyaMiniStation::new();
 
     rob.setup()?;
+
+    debug_robot(&rob);
+
+    // Actions
     stat.home(&mut rob)?;
 
-    dbg!(desc.wobj());
-    dbg!(desc.kin().calculate_end());
-    desc.update(&mut rob, &[ Phi(PI / 2.0), Phi(PI / 2.0), Phi::ZERO, Phi::ZERO ])?;
-    dbg!(desc.wobj());
-    dbg!(desc.kin().calculate_end());
+    // dbg!(desc.wobj());
+    // dbg!(desc.kin().calculate_end());
+    // desc.update(&mut rob, &[ Phi(PI / 2.0), Phi(PI / 2.0), Phi::ZERO, Phi::ZERO ])?;
+    // dbg!(desc.wobj());
+    // dbg!(desc.kin().calculate_end());
     
     Ok(())
 }
