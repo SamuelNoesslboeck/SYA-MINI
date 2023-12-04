@@ -13,7 +13,7 @@ fn main() -> Result<(), sybot::Error> {
 
     log::info!("Logging enabled!");
 
-    let mut rob= sya_mini::sya_mini_rob()?;
+    let mut rob = sya_mini::sya_mini_rob()?;
     let mut desc = sya_mini::SyaMiniDesc::new();
     let mut stat = sya_mini::SyaMiniStation::new();
 

@@ -14,7 +14,7 @@ use sybot::conf::AxisConf;
     const MEAS_PINS : [u8; 4] = [ 4, 17, 27, 22 ];
 
     const BASE_FORCES : [Force; 4] = [ Force(0.0), Force(3.0), Force(2.0), Force(1.0) ];
-    const BASE_INERTIAS : [Inertia; 4] = [ Inertia(0.5), Inertia(0.25), Inertia(0.1), Inertia(0.1) ];
+    const BASE_INERTIAS : [Inertia; 4] = [ Inertia(8.0), Inertia(5.0), Inertia(3.0), Inertia(2.5) ];
 
     const COMP_DATA : CompData = CompData {
         u: 24.0,
